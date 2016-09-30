@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+RewriteEngine  on
+RewriteBase /~molinspa/
+
+RewriteRule     ^(.*)/public/(.+)/(.*)_[0-9]+_(.*)$       $1/public/$2/$3$4
+
+RewriteRule 	MeteoVis/(.*)$ 		MeteoVis_v0/$1
+RewriteRule 	MeteoVis_stage/(.*)$ 	MeteoVis_v10/$1
+</IfModule>

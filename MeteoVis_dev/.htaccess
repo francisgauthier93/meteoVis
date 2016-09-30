@@ -1,0 +1,83 @@
+# GZip compression
+<IfModule mod_deflate.c>
+    # Types de contenus a compresser
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom_xml
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/x-httpd-php
+    AddOutputFilterByType DEFLATE application/x-httpd-fastphp
+    AddOutputFilterByType DEFLATE application/x-httpd-eruby
+
+    # Activation du filtre de compression
+    SetOutputFilter DEFLATE
+
+    # Netscape 4.x a quelques soucis, on ne compresse que le html
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+    # Les versions de Netscape 4.06-4.08 ont quelques soucis
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+    # Comme d'habitude, internet explorer pose probleme
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+    # Ne pas compresser ce type de fichiers
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:pdf|avi|mov|mp3|mp4|rm)$ no-gzip dont-vary
+
+    # Proxies
+    Header append Vary User-Agent env=!dont-vary
+</IfModule>
+ 
+# Leverage Browser Cache
+<IfModule mod_headers.c>
+    # Remote ETag from headers
+    Header unset ETag
+
+    # Disable ETag for files
+    FileETag None
+
+    # Media files are catchable
+    <FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf)$">
+    Header append Cache-Control "public"
+    </FilesMatch>
+
+    # Images, css and javascript files are catchable
+    <FilesMatch "\.(gif|jpg|jpeg|png|js|css)$">
+    Header append Cache-Control "public"
+    </FilesMatch>
+
+    # Commonly updated files are catchable
+    <FilesMatch "\.(xml|html|htm|txt)$">
+    Header append Cache-Control "public"
+    </FilesMatch>
+
+    # Force no caching for dynamic files
+    <FilesMatch "\.(php|cgi|pl|htm)$">
+    Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+    Header set Pragma "no-cache"
+    </FilesMatch>
+</IfModule>
+
+#<IfModule mod_expires.c>
+#    ExpiresActive on
+#    ExpiresByType image/jpg "access 1 week"
+#    ExpiresByType image/jpeg "access 1 week"
+#    ExpiresByType image/gif "access 1 week"
+#    ExpiresByType image/png "access 1 week"
+#    ExpiresByType text/css "access 1 week"
+#    ExpiresByType text/html "access 1 week"
+#    ExpiresByType application/pdf "access 1 week"
+#    ExpiresByType text/x-javascript "access 1 week"
+#    ExpiresByType application/x-shockwave-flash "access 1 week"
+#    ExpiresByType image/x-icon "access 1 week"
+#    ExpiresDefault "access 1 week"
+#</IfModule>

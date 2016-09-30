@@ -1,0 +1,82 @@
+{
+    "fr": {
+        "startDay":"NP(D('le'),N('journée')),VP(V('être').t('f'),*|cloud-cover-value|*)",
+        "conjAnd":"C('et')",
+        "startTemp":"NP(D('le'),N('température')),VP(V('varier').t('f')),P('entre'),NO(*|temperature-min|*),C('et'),NO(*|temperature-max|*)",
+        "startTemp2":"NP(D('le'),N('température')),VP(V('varier').t('f')),P('entre'),$1,C('et'),$2",
+        "windCond": {
+            "class": "windCond", 
+            "default": "J(DTR(DT('*|wind-start-date|*'),DT('*|wind-end-date|*')).only('hour').t('nat'),NP(D('de'), N('vent'), N('*|wind-direction|*')).add(VP(V('pouvoir').f('pr'), V('atteindre'), N(*|wind-max-speed|*), P('km/h'))).n('p')).cap(1)"
+        },
+        "max-temperature": {
+            "class": "max-temperature",
+            "default": "NP(N('température'), N('maximum'), C(':'), N($temperature_max), P('°C')).cap(1)"
+        },
+        "avg-temperature": {
+            "class": "avg-temperature",
+            "default": "NP(N('température'), A('moyen'), C(':'), N(*|temperature-avg|*), P('°C')).cap(1)"
+        },
+        "min-temperature": {
+            "class": "min-temperature",
+            "default": "NP(N('température'), N('minimum'), C(':'), N(*|temperature-min|*), P('°C')).cap(1)"
+        },
+        "temperature": {
+            "class": "temperature",
+            "default": "J(DT('*|temperature-date|*').t('nat').only('hour'),S(Pro('il'), VP(V('faire'),N(*|temperature-value|*),P('°C')))).f('f').c(',').cap(1)"
+        },
+        "accumCond": {
+            "class": "accumCond",
+            "default": "J(DT('*|accumulation-date|*').t('nat').only('day'), Br(), J(N('*|accumulation-type|*'), C(':'), NP(N(*|accumulation-amount|*), PP('cm'))).cap(1), Br(), J(N('Total'), C(':'), NP(N(*|accumulation-total|*), PP('cm')))).cap(1)"
+        },
+        "percentPrecipCond": {
+            "class": "percentPrecipCond",
+            "default": "",
+            "alternative": {
+                "probability-precipitation-value": [
+                        {"min": 0, "max": 49, "text":"NP(A('faible'),N('risque')),PP(P('de'),N('précipitation').n('p'))"},
+                        {"min": 50, "max": 79, "text":"J('Possibilité de précipitations')"},
+                        {"min": 80, "max": 89, "text":"J('Précipitations quasi-certaines')"},
+                        {"min": 90, "max": 100, "text":"J('Précipitations soutenues')"}
+                    ]
+            }
+        },
+        "cloudCond": {
+            "class": "cloudCond",
+            "default": "",
+            "alternative": {
+                "cloud-cover-value": [
+                    {"min": 0, "max": 0, "text": "A('ensoleillé')"},
+                    {"min": 1, "max": 1, "text": "A('ensoleillé'),PP(P('avec'),NP(N('passage'),A('nuageux')).n('p'))"},
+                    {"min": 2, "max": 3, "text": "NP(D('un'),N('alternance'),PP(P('de'),CP(C('et'),N('soleil'),PP(P('de'),N('nuage').n('p')))))"},
+                    {"min": 4, "max": 6, "text": "AP(Adv('partiellement'),A('nuageux'))"},
+                    {"min": 7, "max": 8, "text": "AP(Adv('généralement'),A('nuageux'))"},
+                    {"min": 9, "max": 9, "text": "A('nuageux')"},
+                    {"min": 10, "max": 10, "text": "AP(Adv('très'),A('nuageux'))"}
+                ]
+            }
+        }
+    },
+    "en": {
+        "windCond": {
+            "class": "windCond", 
+            "default": ""
+        },
+        "cloudCond": {
+            "class": "cloudCond",
+            "default": "",
+            "alternative": {
+                "cloud-cover-value": [
+                    {"min": 0, "max": 0, "text": "J('Sunny')"},
+                    {"min": 1, "max": 1, "text": "J('Mainly sunny')"},
+                    {"min": 2, "max": 3, "text": "J('A mix of sun and cloud')"},
+                    {"min": 4, "max": 6, "text": "J('Partly cloudy')"},
+                    {"min": 7, "max": 8, "text": "J('Mostly cloudy')"},
+                    {"min": 9, "max": 9, "text": "J('Broken sky')"},
+                    {"min": 10, "max": 10, "text": "J('Cloudy')"}
+                ]
+            }
+        }
+    },
+    "testPhrase": "S(Pro('je'),VP(V('aimer'),NP(D('le'),N('pomme'))))",
+    "testPhrase2": "S(Pro('je'),VP(V('aimer'),NP(D('le'),*|fruit|*)))"
+}
